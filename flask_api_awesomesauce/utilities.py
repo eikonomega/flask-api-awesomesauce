@@ -3,6 +3,8 @@ This module contains utility methods used by other parts of the
 application.
 
 """
+import re
+
 
 def python_to_json_syntax(dict_to_convert):
     """
