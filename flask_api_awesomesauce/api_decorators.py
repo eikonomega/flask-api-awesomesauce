@@ -10,7 +10,21 @@ from flask import Response, jsonify, current_app, request
 from flask.wrappers import BadRequest
 
 import utilities
-from exceptions import (MalformedJson)
+
+
+def json_response(status_code, response_data):
+    """
+    Args:
+        status_code (int): HTTP Status Code for response object.
+        response_data (dict): Data to be returned as JSON in the response body.
+
+    Returns:
+        A Flask Response object
+
+    """
+    response = jsonify(response_data)
+    response.status_code = status_code
+    return response
 
 
 def api_declaration(
@@ -41,76 +55,40 @@ def api_declaration(
         @wraps(func)
         def wrapper(*args, **kwargs):
 
-            response_data = dict(
-                meta=dict(apiVersion=api_version,
-                          usage=api_usage_declarations,
-                          request=dict(
-                              requestUrl=request.base_url,
-                              requestMethod=request.method),
-                          response=dict()))
-
             # Check for Invalid JSON.
             try:
-                request.get_json()
+                request_json = request.get_json()
             except BadRequest:
-                raise MalformedJson
+                return json_response(
+                    400, {'message': 'JSON is request has a syntax error(s)',
+                          'usage': api_usage_declarations})
 
             if 'requiredPayloadElements' in api_usage_declarations:
-                request_json = request.get_json()
-                for element in api_usage_declarations['requiredPayloadElements']:
+                for element in api_usage_declarations[
+                    'requiredPayloadElements']:
                     if not element in request_json:
-                        response_data['meta']['response']['statusCode'] = 400
-                        response_data['meta']['response']['message'] = (
-                            'Required JSON element(s) are not in payload.')
-                        response = jsonify(response_data)
-                        response.status_code = (
-                            response_data['meta']['response']['statusCode'])
-                        current_app.logger.error(
-                            response_data['meta']['response']['message'])
-                        return response
+                        return json_response(
+                            400,
+                            {'message':
+                                 'JSON is missing a required element(s).',
+                             'usage': api_usage_declarations})
+
             elif 'requiredUrlParameters' in api_usage_declarations:
                 request_args = request.args
                 for element in api_usage_declarations['requiredUrlParameters']:
                     if not element in request_args:
-                        response_data['meta']['response']['statusCode'] = 400
-                        response_data['meta']['response']['message'] = (
-                            'Missing required URL parameter(s).')
-                        response = jsonify(response_data)
-                        response.status_code = (
-                            response_data['meta']['response']['statusCode'])
-                        current_app.logger.error(
-                            response_data['meta']['response']['message'])
-                        return response
+                        return json_response(
+                            400,
+                            {'message':
+                                 'One or more required URL '
+                                 'parameters are missing.',
+                             'usage': api_usage_declarations})
 
-            original_response = func(*args, **kwargs)
-            original_response_data = json.loads(original_response.data)
+            func(*args, **kwargs)
 
-            if type(original_response) != Response:
-
-
-            # Reassign dict location of 'meta' elements from original response.
-            response_data['meta']['response'] = dict()
-            for meta_element in ['statusCode', 'message']:
-                if meta_element in original_response_data:
-                    response_data['meta']['response'][meta_element] = (
-                        original_response_data[meta_element])
-                    original_response_data.pop(meta_element)
-
-            # Transfer remaining origin_response elements to new response dict.
-            for element in original_response_data:
-                response_data[element] = original_response_data[element]
-
-            response = jsonify(response_data)
-            response.status_code = (
-                response_data['meta']['response']['statusCode'])
-            return response
         return wrapper
 
     return decorate
-
-
-
-
 
 
 def response_template(api_version,
@@ -171,7 +149,8 @@ def response_template(api_version,
 
             if 'requiredPayloadElements' in json_syntax_api_usage_declarations:
                 request_json = request.get_json()
-                for element in json_syntax_api_usage_declarations['requiredPayloadElements']:
+                for element in json_syntax_api_usage_declarations[
+                    'requiredPayloadElements']:
                     if not element in request_json:
                         response_data['meta']['response']['statusCode'] = 400
                         response_data['meta']['response']['message'] = (
@@ -184,7 +163,8 @@ def response_template(api_version,
                         return response
             elif 'requiredUrlParameters' in json_syntax_api_usage_declarations:
                 request_args = request.args
-                for element in json_syntax_api_usage_declarations['requiredUrlParameters']:
+                for element in json_syntax_api_usage_declarations[
+                    'requiredUrlParameters']:
                     if not element in request_args:
                         response_data['meta']['response']['statusCode'] = 400
                         response_data['meta']['response']['message'] = (
@@ -218,6 +198,7 @@ def response_template(api_version,
             response.status_code = (
                 response_data['meta']['response']['statusCode'])
             return response
+
         return wrapper
 
     return decorate
