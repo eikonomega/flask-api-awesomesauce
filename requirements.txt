@@ -1,8 +1,11 @@
 Flask==0.10.1
-Jinja2==2.7.2
-MarkupSafe==0.19
-Werkzeug==0.9.4
+Jinja2==2.7.3
+MarkupSafe==0.23
+Werkzeug==0.9.6
+cov-core==1.13.0
+coverage==3.7.1
 itsdangerous==0.24
-py==1.4.20
+py==1.4.21
 pytest==2.5.2
+pytest-cov==1.7.0
 wsgiref==0.1.2
