@@ -10,6 +10,7 @@ from flask import Response, jsonify, current_app, request
 from flask.wrappers import BadRequest
 
 import utilities
+from exceptions import (MalformedJson)
 
 
 def api_declaration(
@@ -34,7 +35,7 @@ def api_declaration(
     api_usage_declarations = {
         key: value for key, value in locals().items() if type(value) == dict}
 
-    python_to_json_syntax(api_usage_declarations)
+    utilities.python_to_json_syntax(api_usage_declarations)
 
     def decorate(func):
         @wraps(func)
@@ -52,15 +53,7 @@ def api_declaration(
             try:
                 request.get_json()
             except BadRequest:
-                response_data['meta']['response']['message'] = (
-                    'JSON contains syntax errors.')
-                response_data['meta']['response']['statusCode'] = 400
-                response = jsonify(response_data)
-                response.status_code = (
-                    response_data['meta']['response']['statusCode'])
-                current_app.logger.error(
-                    response_data['meta']['response']['message'])
-                return response
+                raise MalformedJson
 
             if 'requiredPayloadElements' in api_usage_declarations:
                 request_json = request.get_json()
