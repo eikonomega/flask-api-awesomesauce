@@ -5,7 +5,7 @@ install:
   - pip install -r requirements.txt
   - pip install coveralls pytest-cov
 
-script: py.test --cov-report term-missing --cov flask_authorization_panda
+script: py.test --cov-report term-missing --cov flask_api_awesomesauce
 
 after_success: coveralls
 
@@ -16,4 +16,4 @@ deploy:
   password:
     secure: g0qFyS/i4aRuSjKgNGJBZ3N/JqsBLOqA53yQZjA92Fl5t5eb8koJT3hTzhiB0tmkwNN8WxHXRaRiqkSvmKK4xwfN8SZ4w4CmxYKVkhZ13LdW6ebX7wFaFUpDWU1l9dlIRFzii0dwMGV7/DiQiGRsOH213ae9nyE58pwbv+vRF3w=
   on:
-    repo: eikonomega/flask-api-panda
+    repo: eikonomega/flask-api-awesomesauce
