@@ -90,30 +90,6 @@ def test_api_declaration_with_missing_required_url_parameter(flask_app):
         response['statusCode'] == 400,
         response['usage']])
 
-# def test_no_credentials_in_request(flask_app):
-#     flask_app.config['basic_auth_credentials'] = dict(username='admin',
-#                                                       password='secret')
-#     response = flask_app.test_client().get('/')
-#     assert "HTTP Basic Auth required for this URL" in response.data
-#     assert "WWW-Authenticate" in response.headers
-#
-#
-# def test_basic_auth_with_bad_credentials(flask_app):
-#     flask_app.config['basic_auth_credentials'] = dict(username='admin',
-#                                                       password='secret')
-#     response = flask_app.test_client().get('/', headers={
-#         'Authorization': 'Basic {}'.format(b64encode('wrong:creds'))})
-#     assert 'with proper credentials' in response.data
-#     assert "WWW-Authenticate" in response.headers
-#
-#
-# def test_basic_auth(flask_app):
-#     flask_app.config['basic_auth_credentials'] = dict(username='admin',
-#                                                       password='secret')
-#     response = flask_app.test_client().get('/', headers={
-#         'Authorization': 'Basic {}'.format(b64encode('admin:secret'))})
-#     assert '200' in response.data
-
 
 
 
