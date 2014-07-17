@@ -14,6 +14,6 @@ deploy:
   user: eikonomega
   server: http://pypi.python.org/pypi
   password:
-    secure: g0qFyS/i4aRuSjKgNGJBZ3N/JqsBLOqA53yQZjA92Fl5t5eb8koJT3hTzhiB0tmkwNN8WxHXRaRiqkSvmKK4xwfN8SZ4w4CmxYKVkhZ13LdW6ebX7wFaFUpDWU1l9dlIRFzii0dwMGV7/DiQiGRsOH213ae9nyE58pwbv+vRF3w=
+    secure: ddA2GEhOsG8Z6KBssW3Mx2qWJ2HxGYDtjpQgvr7l2lizli12UFmtl1CllBaXNB9iZgTYm8g7a2eM73QQU0whkeWGecb233wRLJjUYjQmIv3kZRLkvmWopEYY9iwqyASSvY8ykmU6o3JNCfRvQ5bZw+mDVROs6ldJXYlw/6A6hhM=
   on:
     repo: eikonomega/flask-api-awesomesauce
