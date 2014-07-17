@@ -1,19 +1,16 @@
 language: python
 python:
-  - '2.7'
+- '2.7'
 install:
-  - pip install -r requirements.txt
-  - pip install coveralls pytest-cov
-
+- pip install -r requirements.txt
+- pip install coveralls pytest-cov
 script: py.test --cov-report term-missing --cov flask_api_awesomesauce
-
 after_success: coveralls
-
 deploy:
   provider: pypi
   user: eikonomega
   server: http://pypi.python.org/pypi
   password:
-    secure: ddA2GEhOsG8Z6KBssW3Mx2qWJ2HxGYDtjpQgvr7l2lizli12UFmtl1CllBaXNB9iZgTYm8g7a2eM73QQU0whkeWGecb233wRLJjUYjQmIv3kZRLkvmWopEYY9iwqyASSvY8ykmU6o3JNCfRvQ5bZw+mDVROs6ldJXYlw/6A6hhM=
+    secure: JWSBgEj9CP6OQnYx/kyXH5zNaGQaqliiyUHsWx+GfuZsGUnOGBG3duHo85r+WeoXbzzzv97AyJWgDsaZj4AD1al1tn50YCnAliCwxRb5Vwy/WEY/0MUK5aGz1IQC++R2PTWuDiUQ3B7b8YmlQzk/tsHaEKu9si2tcqNQfRHVTC0=
   on:
     repo: eikonomega/flask-api-awesomesauce
